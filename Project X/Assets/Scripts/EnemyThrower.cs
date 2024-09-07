@@ -25,6 +25,7 @@ public class EnemyThrower : Enemy
     [SerializeField] GameObject throwablePrefab;
     [SerializeField] float throwPreparation = 0.3f;
     [SerializeField] float maxVelocity = 30f;
+    [SerializeField] Vector3 throwTorque = new(0, 180, 0);
 
     private new void Awake() {
         base.Awake();
@@ -62,15 +63,15 @@ public class EnemyThrower : Enemy
 
         if (!isAttacking) {
             isAttacking = true;
-            throwPoint = playerTf.position;
             Invoke(nameof(Throw), throwPreparation);
         }
     }
     private void Throw() {
 
+        throwPoint = playerTf.position;
         throwable = Instantiate(throwablePrefab, throwableSpawnPoint);
         throwable.transform.SetParent(null);
-        throwable.transform.rotation = Quaternion.Euler(0, 0, 0);
+        throwable.GetComponent<Rigidbody>().AddTorque(throwTorque, ForceMode.Impulse);
         Rigidbody rb = throwable.GetComponent<Rigidbody>();
 
         Vector3 toTarget = throwPoint - throwableSpawnPoint.position;

@@ -107,9 +107,9 @@ MonoBehaviour:
     attackDamage: 10
     attackCooldown: 2
   anim: {fileID: 430074148418168942}
-  floatSpeed: 0.5
-  floatAmplitude: 2.5
-  floatPeakPause: 0.1
+  floatSpeed: 1
+  floatTime: 1
+  floatPeakPause: 1
   explosionPrefab: {fileID: 8324337029761134256, guid: 16e5aa2956be89a4ba94b4bcbcd0eaa1, type: 3}
   explosionDuration: 1.2
   explosionDelay: 1
