@@ -5,7 +5,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnemyThrower : Enemy
 {
-    private Transform playerTf;
     [SerializeField] Animator anim;
 
     private bool isRotating = false;
@@ -27,23 +26,18 @@ public class EnemyThrower : Enemy
     [SerializeField] float maxVelocity = 30f;
     [SerializeField] Vector3 throwTorque = new(0, 180, 0);
 
-    private new void Awake() {
-        base.Awake();
-        playerTf = GameObject.Find("Player").GetComponent<Transform>();
-    }
-
-    private new void Start() {
-        base.Start();
-    }
-
     void Update() {
         if (!gameManager.gameOver) {
             float distance = (playerTf.position - transform.position).magnitude;
+            if (InDetectRange(distance)) {
+                if (!PlayerIsSeen())
+                    distance = stats.detectRange + 1;
+            }
 
-            if (distance > stats.detectRange) {
+            if (OutsideRange(distance)) {
                 Idle();
             }
-            else if (distance <= stats.detectRange && distance > stats.attackRange) {
+            else if (InDetectRange(distance)) {
                 anim.SetBool("isIdle", false);
                 anim.SetBool("isThrowing", false);
                 TrackPlayer();
@@ -57,6 +51,7 @@ public class EnemyThrower : Enemy
 
     protected override void Attack() {
         anim.SetBool("isThrowing", true);
+        anim.SetBool("isIdle", false);
 
         TrackPlayer();
         moveDirection = Vector3.zero;

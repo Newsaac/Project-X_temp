@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemyWalker : Enemy
 {
-    
-    private Transform playerTf;
     [SerializeField] Animator anim;
     [SerializeField] Animator animLod;
 
@@ -20,25 +18,20 @@ public class EnemyWalker : Enemy
     [SerializeField] float idleRotatePause = 0.7f;
     [SerializeField] float idleRotateSpeed = 2f;
 
-    private new void Awake() {
-        base.Awake();
-        playerTf = GameObject.Find("Player").GetComponent<Transform>();
-    }
-
-    private new void Start() {
-        base.Start();
-    }
-
     void Update() {
         if(!gameManager.gameOver && hp > 0) {
             float distance = (playerTf.position - transform.position).magnitude;
+            if (InDetectRange(distance)) {
+                if (!PlayerIsSeen())
+                    distance = stats.detectRange + 1;
+            }
 
-            if (distance > stats.detectRange) {
+            if (OutsideRange(distance)) {
                 anim.SetBool("isIdle", true);
                 animLod.SetBool("isIdle", true);
                 Idle();
             }
-            else if (distance <= stats.detectRange && distance > stats.attackRange) {
+            else if (InDetectRange(distance)) {
                 anim.SetBool("isIdle", false);
                 animLod.SetBool("isIdle", false);
                 TrackPlayer();

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyFlyer : Enemy
 {
-    private Transform playerTf;
     private AudioSource audioSource;
     [SerializeField] Animator anim;
 
@@ -29,20 +28,19 @@ public class EnemyFlyer : Enemy
     private new void Awake() {
         base.Awake();
         audioSource = GetComponent<AudioSource>();
-        playerTf = GameObject.Find("Player").GetComponent<Transform>();
-    }
-
-    private new void Start() {
-        base.Start();
     }
 
     void Update() {
         if (!gameManager.gameOver && hp > 0) {
             float distance = (playerTf.position - transform.position).magnitude;
+            if (InDetectRange(distance)) {
+                if (!PlayerIsSeen())
+                    distance = stats.detectRange + 1;
+            }
 
-            if (distance > stats.detectRange)
+            if (OutsideRange(distance))
                 Idle();
-            else if (distance <= stats.detectRange && distance > stats.attackRange)
+            else if (InDetectRange(distance))
                 TrackPlayer();
             else {
                 isIdle = false;
