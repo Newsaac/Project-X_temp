@@ -5,8 +5,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnemyThrower : Enemy
 {
-
-    private Rigidbody rb;
     private Transform playerTf;
     [SerializeField] Animator anim;
 
@@ -30,7 +28,6 @@ public class EnemyThrower : Enemy
 
     private new void Awake() {
         base.Awake();
-        rb = GetComponent<Rigidbody>();
         playerTf = GameObject.Find("Player").GetComponent<Transform>();
     }
 
@@ -43,8 +40,6 @@ public class EnemyThrower : Enemy
             float distance = (playerTf.position - transform.position).magnitude;
 
             if (distance > stats.detectRange) {
-                anim.SetBool("isIdle", true);
-                anim.SetBool("isThrowing", false);
                 Idle();
             }
             else if (distance <= stats.detectRange && distance > stats.attackRange) {
@@ -53,7 +48,6 @@ public class EnemyThrower : Enemy
                 TrackPlayer();
             }
             else {
-                anim.SetBool("isThrowing", true);
                 if(hp > 0) 
                     Attack();
             }
@@ -61,9 +55,10 @@ public class EnemyThrower : Enemy
     }
 
     protected override void Attack() {
-        Vector3 lookDirection = playerTf.position;
-        lookDirection = new Vector3(lookDirection.x, transform.position.y, lookDirection.z);
-        transform.LookAt(lookDirection);
+        anim.SetBool("isThrowing", true);
+
+        TrackPlayer();
+        moveDirection = Vector3.zero;
 
         if (!isAttacking) {
             isAttacking = true;
@@ -115,11 +110,14 @@ public class EnemyThrower : Enemy
     }
 
     protected override void Idle() {
+        anim.SetBool("isIdle", true);
+        anim.SetBool("isThrowing", false);
+        moveDirection = Vector3.zero;
         if (!isRotateOnCooldown) {
             if (isRotating) {
                 if (rotationProgress < 1 && rotationProgress >= 0) {
                     rotationProgress += Time.deltaTime * idleRotateSpeed;
-                    transform.rotation = Quaternion.Lerp(initialRotation, targetRotation, rotationProgress);
+                    rotation = Quaternion.Lerp(initialRotation, targetRotation, rotationProgress);
                 }
                 else {
                     isRotating = false;
@@ -150,18 +148,17 @@ public class EnemyThrower : Enemy
     }
 
     protected override void TrackPlayer() {
-        Vector3 moveDirection = playerTf.position - transform.position;
+        moveDirection = playerTf.position - transform.position;
         moveDirection.y = 0;
 
-        Vector3 lookDirection = playerTf.position;
-        //uncomment to disable vertical player tracking
-        lookDirection = new Vector3(lookDirection.x, transform.position.y, lookDirection.z);
-
-        rb.AddForce(moveDirection.normalized * stats.speed);
-        transform.LookAt(lookDirection);
+        Vector3 lookDirection = moveDirection;
+        lookDirection = new Vector3(lookDirection.x, 0, lookDirection.z);
+        rotation = Quaternion.LookRotation(lookDirection);
     }
 
     protected override void OnDeath() {
+        moveDirection = Vector3.zero;
+
         healthBar.gameObject.SetActive(false);
         Destroy(gameObject.GetComponent<Rigidbody>());
         gameObject.GetComponent<CapsuleCollider>().enabled = false;

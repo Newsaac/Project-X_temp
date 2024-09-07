@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class EnemyWalker : Enemy
 {
-    private Rigidbody rb;
+    
     private Transform playerTf;
     [SerializeField] Animator anim;
     [SerializeField] Animator animLod;
+
+    private bool isAttacking = false;
 
     private bool isRotating = false;
     private float rotationProgress = -1;
@@ -20,7 +22,6 @@ public class EnemyWalker : Enemy
 
     private new void Awake() {
         base.Awake();
-        rb = GetComponent<Rigidbody>();
         playerTf = GameObject.Find("Player").GetComponent<Transform>();
     }
 
@@ -52,14 +53,17 @@ public class EnemyWalker : Enemy
 
     protected override void Attack() {
         TrackPlayer();
+        if (isAttacking)
+            moveDirection = Vector3.zero;
     }
 
     protected override void Idle() {
+        moveDirection = Vector3.zero;
         if (!isRotateOnCooldown) {
             if (isRotating) {
                 if (rotationProgress < 1 && rotationProgress >= 0) {
                     rotationProgress += Time.deltaTime * idleRotateSpeed;
-                    transform.rotation = Quaternion.Lerp(initialRotation, targetRotation, rotationProgress);
+                    rotation = Quaternion.Lerp(initialRotation, targetRotation, rotationProgress);
                 }
                 else {
                     isRotating = false;
@@ -84,19 +88,19 @@ public class EnemyWalker : Enemy
     }
 
     protected override void TrackPlayer() {
-        Vector3 moveDirection = playerTf.position - transform.position;
+        moveDirection = playerTf.position - transform.position;
         moveDirection.y = 0;
 
-        Vector3 lookDirection = playerTf.position;  
-        lookDirection = new Vector3(lookDirection.x, transform.position.y, lookDirection.z);
+        Vector3 lookDirection = moveDirection;  
+        lookDirection = new Vector3(lookDirection.x, 0, lookDirection.z);
 
-        rb.AddForce(moveDirection.normalized * stats.speed);
-        transform.LookAt(lookDirection);
+        rotation = Quaternion.LookRotation(lookDirection);
     }
 
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Player")) {
             anim.SetBool("isAttacking", true);
+            isAttacking = true;
             InvokeRepeating(nameof(PerformAttack), stats.collideDmgCooldown, stats.collideDmgCooldown);
         }
     }
@@ -104,6 +108,7 @@ public class EnemyWalker : Enemy
     private void OnCollisionExit(Collision collision) {
         if (collision.gameObject.CompareTag("Player")) {
             anim.SetBool("isAttacking", false);
+            isAttacking = false;
             CancelInvoke(nameof(PerformAttack));
         }
     }
@@ -113,6 +118,7 @@ public class EnemyWalker : Enemy
     }
 
     protected override void OnDeath() {
+        moveDirection = Vector3.zero;
         healthBar.gameObject.SetActive(false);
         Destroy(gameObject.GetComponent<Rigidbody>());
         gameObject.GetComponent<CapsuleCollider>().enabled = false;

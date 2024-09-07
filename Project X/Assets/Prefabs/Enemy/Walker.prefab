@@ -43,7 +43,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791048426668395319}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: fb6ac4ee07e538f4f9726e30d442fe71, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -67,8 +67,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791048426668395319}
   serializedVersion: 4
-  m_Mass: 10
-  m_Drag: 0
+  m_Mass: 70
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -83,8 +83,8 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
+  m_Interpolate: 1
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &135948349487863345
 MonoBehaviour:
@@ -100,10 +100,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     maxHp: 5
-    collideDamage: 10
+    collideDamage: 0
     collideDmgCooldown: 0.5
-    speed: 15
-    detectRange: 20
+    speed: 1000
+    detectRange: 30
     attackRange: 10
     attackDamage: 0
     attackCooldown: 0

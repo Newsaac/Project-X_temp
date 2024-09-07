@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyFlyer : Enemy
 {
-    private Rigidbody rb;
     private Transform playerTf;
     private AudioSource audioSource;
     [SerializeField] Animator anim;
@@ -30,7 +29,6 @@ public class EnemyFlyer : Enemy
     private new void Awake() {
         base.Awake();
         audioSource = GetComponent<AudioSource>();
-        rb = GetComponent<Rigidbody>();
         playerTf = GameObject.Find("Player").GetComponent<Transform>();
     }
 
@@ -56,6 +54,7 @@ public class EnemyFlyer : Enemy
 
     #region Attack
     protected override void Attack() {
+        moveDirection = Vector3.zero;
         anim.SetTrigger("Attack");
         explosionOnCooldown = true;
         Invoke(nameof(CreateExplosion), explosionDelay);
@@ -80,19 +79,17 @@ public class EnemyFlyer : Enemy
 
     protected override void TrackPlayer() {
         isIdle = false;
-        Vector3 moveDirection = playerTf.position - transform.position;
+        moveDirection = playerTf.position - transform.position;
 
-        Vector3 lookDirection = playerTf.position;
-        lookDirection = new Vector3(lookDirection.x, transform.position.y, lookDirection.z);
-
-        rb.AddForce(moveDirection.normalized * stats.speed);
-        transform.LookAt(lookDirection);
+        Vector3 lookDirection = moveDirection;
+        lookDirection = new Vector3(lookDirection.x, 0, lookDirection.z);
+        rotation = Quaternion.LookRotation(lookDirection);
     }
 
     #region Idle
     protected override void Idle() {
         if (!isIdle) {
-            rb.velocity = Vector3.zero;
+            moveDirection = Vector3.zero;
             initialAltitude = transform.position.y;
             floatProgress = 0.5f;
             isIdle = true;
@@ -140,7 +137,7 @@ public class EnemyFlyer : Enemy
     #endregion
 
     protected override void OnDeath() {
-        rb.velocity = Vector3.zero;
+        moveDirection = Vector3.zero;
         healthBar.gameObject.SetActive(false);
 //        if(!explosionOnCooldown)
         Invoke(nameof(Die), explosionDelay + explosionDuration + 0.05f);

@@ -12,7 +12,14 @@ public abstract class Enemy : MonoBehaviour
     protected FloatingStatusBar healthBar;
     protected GameManager gameManager;
 
+    protected Rigidbody rb;
+    protected Vector3 moveDirection = Vector3.zero;
+    protected Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
     protected void Awake() {
+        rotation = transform.rotation;
+
+        rb = GetComponent<Rigidbody>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         healthBar = GetComponentInChildren<FloatingStatusBar>();
     }
@@ -21,6 +28,13 @@ public abstract class Enemy : MonoBehaviour
         gameManager.enemiesLeft++;
         hp = stats.maxHp;
         healthBar.UpdateValue(hp, stats.maxHp);
+    }
+
+    protected virtual void FixedUpdate() {
+        if (rb != null) {
+            rb.MoveRotation(rotation);
+            rb.AddForce(moveDirection.normalized * stats.speed);
+        }
     }
 
     protected abstract void Attack();

@@ -76,8 +76,8 @@ MonoBehaviour:
     maxHp: 3
     collideDamage: 10
     collideDmgCooldown: 0.5
-    speed: 5
-    detectRange: 25
+    speed: 1500
+    detectRange: 35
     attackRange: 15
     attackDamage: 0
     attackCooldown: 3
@@ -96,8 +96,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7095351309073035641}
   serializedVersion: 4
-  m_Mass: 10
-  m_Drag: 0
+  m_Mass: 70
+  m_Drag: 3
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -112,8 +112,8 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
+  m_Interpolate: 1
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!1 &8054271214492068341
 GameObject:

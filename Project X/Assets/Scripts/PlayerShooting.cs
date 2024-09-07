@@ -81,7 +81,7 @@ public class PlayerShooting : MonoBehaviour
                 }
 
                 if (hit.rigidbody != null) {
-                    hit.rigidbody.AddForce(-hit.normal * weaponSpecs.hitForce);
+                    hit.rigidbody.AddForce(playerCamera.transform.TransformDirection(Vector3.forward) * weaponSpecs.hitForce * 5000f);
                 }
             }
         }
