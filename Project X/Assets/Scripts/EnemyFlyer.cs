@@ -16,7 +16,7 @@ public class EnemyFlyer : Enemy
     private bool floatPause = false;
     [Header("Idle")]
     [SerializeField] float floatSpeed = 5f;
-    [SerializeField] float floatAmplitude = 7f;
+    [SerializeField] float floatTime = 1f;
     [SerializeField] float floatPeakPause = 0.25f;
 
     private GameObject explosion;
@@ -91,28 +91,24 @@ public class EnemyFlyer : Enemy
         if (!isIdle) {
             moveDirection = Vector3.zero;
             initialAltitude = transform.position.y;
-            floatProgress = 0.5f;
+            floatProgress = 0f;
             isIdle = true;
         }
         if (!floatPause) {
-            if (floatProgress >= 0 && floatProgress <= 1) {
-                floatProgress += Time.deltaTime * floatSpeed * floatDirection;
-                transform.position = new Vector3(
-                        transform.position.x,
-                        Mathf.Lerp(initialAltitude - floatAmplitude, initialAltitude + floatAmplitude, floatProgress),
-                        transform.position.z
-                    );
+            if (floatProgress >= 0 && floatProgress <= floatTime) {
+                floatProgress += Time.deltaTime;
+                moveDirection = floatDirection * floatSpeed * Vector3.up;
             }
             else {
-                floatProgress = Mathf.Clamp(floatProgress, 0f, 1f);
+                floatProgress = 0;
                 floatDirection *= -1;
                 StartCoroutine(nameof(FloatPause));
             }
         }
-
     }
     private IEnumerator FloatPause() {
         floatPause = true;
+        moveDirection = Vector3.zero;
         yield return new WaitForSeconds(floatPeakPause);
         floatPause = false;
     }

@@ -3314,11 +3314,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5323884776048133879, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5323884776048133879, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5634295756455800769, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
       propertyPath: m_Name
@@ -3326,7 +3326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5634295756455800769, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5955070788299187281, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3367,6 +3367,14 @@ PrefabInstance:
     - target: {fileID: 5955070788299187281, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168525542768191164, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
+      propertyPath: floatSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168525542768191164, guid: 0c5beb49f1d5f124c8a822e6a77795c8, type: 3}
+      propertyPath: floatPeakPause
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3776,7 +3784,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1791048426668395319, guid: cab2f0109763cd84e9493725a0b474ed, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2421499721113490266, guid: cab2f0109763cd84e9493725a0b474ed, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3820,11 +3828,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5208699897929622040, guid: cab2f0109763cd84e9493725a0b474ed, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5208699897929622040, guid: cab2f0109763cd84e9493725a0b474ed, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
